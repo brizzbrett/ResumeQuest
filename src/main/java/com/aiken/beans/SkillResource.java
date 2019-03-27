@@ -1,5 +1,6 @@
 package com.aiken.beans;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,7 +23,7 @@ public class SkillResource
 	@Column(name="url")
 	private String url;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.PERSIST)
     @JoinColumn(name = "skill_id")
     private Skill skill;
 	

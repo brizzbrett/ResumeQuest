@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -18,12 +19,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 @Table(name = "skill")
 @XmlRootElement
-public class Skill implements Serializable
+public class Skill implements Serializable, Comparable<Skill>
 {
 	private static final long serialVersionUID = -6347102639298100293L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	
 	@JsonProperty(value="skilltype")	
@@ -52,6 +53,11 @@ public class Skill implements Serializable
 		this.resourceList.add(new SkillResource(this,"What's up with that?", ""));
 		
 	}
+	public Skill(String skillType, List<SkillResource> resourceList)
+	{
+		this.skillType = skillType;
+		this.resourceList = resourceList;
+	}
 
 	public String getSkillType() 
 	{
@@ -63,7 +69,7 @@ public class Skill implements Serializable
 		return resourceList;
 	}
 
-	public void setResourceList(ArrayList<SkillResource> resourceList) 
+	public void setResourceList(List<SkillResource> resourceList) 
 	{
 		this.resourceList = resourceList;
 	}
@@ -71,6 +77,30 @@ public class Skill implements Serializable
 	public int getId()
 	{
 		return id;
+	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		Skill skill = null;
+		// TODO Auto-generated method stub
+		if(obj instanceof Skill)
+		{
+			skill = (Skill)obj;
+		}
+		return this.skillType.equals(skill.skillType);
+	}
+	@Override
+	public int hashCode()
+	{
+		// TODO Auto-generated method stub
+		return this.id;
+	}
+
+	@Override
+	public int compareTo(Skill o)
+	{
+		return this.skillType.compareTo(o.skillType);
 	}
 
 

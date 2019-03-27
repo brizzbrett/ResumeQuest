@@ -1,6 +1,5 @@
 package com.aiken.beans;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -8,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @XmlRootElement
-public class FileInformation 
+public class FileInformation
 {
 	@JsonProperty(value="filename")
     private String fileName;
@@ -19,6 +18,8 @@ public class FileInformation
 	@JsonProperty(value="skills")
 	private Set<Skill> skillList;
 
+	public FileInformation() {}
+	
     public FileInformation(String fileName, String fileDownloadUri, String fileType, Set<Skill> skillList) {
         this.fileName = fileName;
         this.fileDownloadUri = fileDownloadUri;

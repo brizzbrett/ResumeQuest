@@ -1,7 +1,6 @@
 package com.aiken.controllers;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +25,12 @@ public class ParseController {
 	@Autowired
 	private ParseService helper;
 
+	@DeleteMapping(path="/delete")
+	public ResponseEntity<?> deletePersistedFile()
+	{
+		helper.deletePersistedFile();
+		return ResponseEntity.ok().build();	
+	}
 	@GetMapping(path="/skills/{skill}")
 	public ResponseEntity<Set<SkillResource>> getSkills(@PathVariable String skill, HttpServletRequest request) 
 	{
@@ -41,11 +46,11 @@ public class ParseController {
 
 	@PostMapping(path="/upload",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE}, 
 			consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public FileInformation uploadFile(@RequestParam("file") MultipartFile file) 
+	public ResponseEntity<FileInformation> uploadFile(@RequestParam("file") MultipartFile file) 
 	{
 		FileInformation fileInfo = helper.saveSkills(file);
 
-		return fileInfo;
+		return ResponseEntity.ok(fileInfo);
 	}
 
 	@GetMapping(path="/download/{fileName:.+}", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
