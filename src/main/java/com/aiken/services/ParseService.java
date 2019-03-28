@@ -7,11 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.springframework.data.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -102,6 +100,7 @@ public class ParseService
 	    	
 	    	for(Skill skill : SkillBuilder.buildSkills(docxExtract, "docx"))
 	    	{
+//	    		skill.setResourceList(ResourceBuilder.buildSkillResources(skill, skill.getSkillType()));
 	    		skillRepo.save(skill);
 	    	}
 	    	
@@ -111,6 +110,7 @@ public class ParseService
     		String pdfExtract = Converter.pdfConverter(file, filename);
 	    	for(Skill skill : SkillBuilder.buildSkills(pdfExtract, "pdf"))
 	    	{
+//	    		ResourceBuilder.buildSkillResources(skill, skill.getSkillType());
 	    		skillRepo.save(skill);
 	    	}
     	}

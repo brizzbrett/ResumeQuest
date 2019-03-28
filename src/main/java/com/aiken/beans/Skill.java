@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.aiken.files.ResourceBuilder;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -44,13 +45,6 @@ public class Skill implements Serializable, Comparable<Skill>
 	public Skill(String skillType)
 	{
 		this.skillType = skillType;
-		this.resourceList = new ArrayList<>();
-		this.resourceList.add(new SkillResource(this,"What is java?", "https://docs.oracle.com/javase/8/docs/api/javax/swing/text/Document.html"));
-		this.resourceList.add(new SkillResource(this,"What is C++?",""));
-		this.resourceList.add(new SkillResource(this,"What is MongoDB?", ""));
-		this.resourceList.add(new SkillResource(this,"Is a hotdog a sandwich?", ""));
-		this.resourceList.add(new SkillResource(this,"Is Joe a human?", ""));
-		this.resourceList.add(new SkillResource(this,"What's up with that?", ""));
 		
 	}
 	public Skill(String skillType, List<SkillResource> resourceList)

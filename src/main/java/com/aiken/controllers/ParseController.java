@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,16 +33,20 @@ public class ParseController {
 		return ResponseEntity.ok().build();	
 	}
 	@GetMapping(path="/skills/{skill}")
-	public ResponseEntity<Set<SkillResource>> getSkills(@PathVariable String skill, HttpServletRequest request) 
+	public String skills(Model model, @PathVariable String skill) 
 	{
-	
-		Set<SkillResource> resource = helper.getSkillResources(skill);
-		if(resource != null)
+		System.out.println("Model");
+		Set<SkillResource> resources = helper.getSkillResources(skill);
+		System.out.println(resources);
+		
+		if(resources != null)
 		{
-			return ResponseEntity.ok(resource);
+			model.addAttribute("resources", resources);
+			
+			return "skills";
 		}
 		
-		return ResponseEntity.noContent().build();
+		return "redirect:/";
 	}
 
 	@PostMapping(path="/upload",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE}, 

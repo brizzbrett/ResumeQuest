@@ -34,8 +34,8 @@ function uploadSingleFile(file) {
 	        var i;
 	        for (i in response.skills) 
 	        {
-	        	singleFileUploadSuccess.innerHTML += "<br><b><a href=" + response.skills[i].resourcelist[0].url + " target=_blank>" + response.skills[i].resourcelist[0].question + "</a>";
-	        	//singleFileUploadSuccess.innerHTML += "<br><b><a href=" + response.skills[i].resourcelist[1].url + " target=_blank>" + response.skills[i].resourcelist[1].question + "</a>";
+	        	//singleFileUploadSuccess.innerHTML += "<br><b><a href=" + response.skills[i].resourcelist[0].url + " target=_blank>" + response.skills[i].resourcelist[0].question + "</a>";
+	        	singleFileUploadSuccess.innerHTML += "<br><b><a href=localhost:8080/skills/" + response.skills[i].skilltype + " target=_blank>" + response.skills[i].skilltype + " resources" + "</a>";
 	        }
 	        singleFileUploadSuccess.innerHTML += "</p>";
 	        
