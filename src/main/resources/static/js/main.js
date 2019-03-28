@@ -16,6 +16,52 @@ function deleteFile()
     location.reload();
 }
 
+function getFileInformation()
+{
+	console.log("GET FILES")
+	var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/get"); 
+    xhr.onload = function() {
+    	if(xhr.status == 200) {
+    		console.log("GET UPLOAD")
+	        var response = JSON.parse(xhr.responseText);
+    		document.querySelector('#uploadForm').style.display = "block";
+    		document.querySelector('#resumeQuest').style.display = "block";
+    		document.querySelector('#skillInfo').style.display = "none"
+    		document.querySelector('#uploadHeader').style.display = "none"
+    		document.querySelector('#singleUploadForm').style.display = "none"
+    		document.querySelector('#singleFileUploadError').style.display = "none";
+    		document.querySelector('#singleFileUploadSuccess').innerHTML = "<p>" + response.filename + " Uploaded Successfully. <button id=uploadNew onclick=deleteFile()>Upload New File</button></p><p>DownloadUrl : <a href='" + response.filedownloaduri + "' target='_blank'>" + response.filedownloaduri + "</a>";
+	        var i;
+	        for (i in response.skills) 
+	        {
+	        	//singleFileUploadSuccess.innerHTML += "<br><b><a href=" + response.skills[i].resourcelist[0].url + " target=_blank>" + response.skills[i].resourcelist[0].question + "</a>";
+	        	document.querySelector('#singleFileUploadSuccess').innerHTML += "<br><b><a href=javascript:getSkillURL(\"" + response.skills[i].skilltype + "\"); target=_blank>" + response.skills[i].skilltype + " resources" + "</a>";
+	        }
+	        document.querySelector('#singleFileUploadSuccess').innerHTML += "</p>";
+	        
+	        document.querySelector('#singleFileUploadSuccess').style.display = "block";
+	    } else {
+	    	document.querySelector('#singleFileUploadSuccess').style.display = "none";
+	    	document.querySelector('#singleFileUploadError').innerHTML = (response && response.message) || "Some Error Occurred";
+	    }
+    };
+    xhr.send(null);
+}
+
+function getSkillURL(skillType){
+	var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/skills/" + skillType);
+    
+    xhr.send(null);
+    xhr.onreadystatechange=(e)=>
+    {
+    	document.body.innerHTML = xhr.responseText;
+    	document.querySelector('#uploadForm').style.display = "none";
+    	document.querySelector('#resumeQuest').style.display = "none";
+    }
+}
+
 function uploadSingleFile(file) {
     var formData = new FormData();
     formData.append("file", file);
@@ -35,7 +81,7 @@ function uploadSingleFile(file) {
 	        for (i in response.skills) 
 	        {
 	        	//singleFileUploadSuccess.innerHTML += "<br><b><a href=" + response.skills[i].resourcelist[0].url + " target=_blank>" + response.skills[i].resourcelist[0].question + "</a>";
-	        	singleFileUploadSuccess.innerHTML += "<br><b><a href=localhost:8080/skills/" + response.skills[i].skilltype + " target=_blank>" + response.skills[i].skilltype + " resources" + "</a>";
+	        	singleFileUploadSuccess.innerHTML += "<br><b><a href=javascript:getSkillURL(\"" + response.skills[i].skilltype + "\"); target=_blank>" + response.skills[i].skilltype + " resources" + "</a>";
 	        }
 	        singleFileUploadSuccess.innerHTML += "</p>";
 	        

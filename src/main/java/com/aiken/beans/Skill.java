@@ -14,7 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.aiken.files.ResourceBuilder;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity

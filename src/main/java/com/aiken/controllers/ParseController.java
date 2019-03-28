@@ -1,15 +1,19 @@
 package com.aiken.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +22,7 @@ import com.aiken.beans.FileInformation;
 import com.aiken.beans.SkillResource;
 import com.aiken.services.ParseService;
 
-@RestController
+@Controller
 public class ParseController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ParseController.class);
@@ -26,21 +30,27 @@ public class ParseController {
 	@Autowired
 	private ParseService helper;
 
+	@GetMapping(path="/get")
+	public ResponseEntity<FileInformation> getPersistedFile()
+	{
+		FileInformation fi = helper.getPersistedFile();
+		return ResponseEntity.ok(fi);	
+	}
 	@DeleteMapping(path="/delete")
 	public ResponseEntity<?> deletePersistedFile()
 	{
 		helper.deletePersistedFile();
 		return ResponseEntity.ok().build();	
 	}
+	
 	@GetMapping(path="/skills/{skill}")
 	public String skills(Model model, @PathVariable String skill) 
 	{
 		System.out.println("Model");
-		Set<SkillResource> resources = helper.getSkillResources(skill);
-		System.out.println(resources);
-		
+		List<SkillResource> resources = helper.getSkillResources(skill);
 		if(resources != null)
 		{
+			model.addAttribute("title", skill + " Interview Resources");
 			model.addAttribute("resources", resources);
 			
 			return "skills";

@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.aiken.beans.Skill;
 import com.aiken.beans.SkillResource;
@@ -24,9 +26,13 @@ public class SkillBuilder
 			
 			for(String s : paragraphs)
 			{
-				//System.out.println(s + " ==== ");
-				if(s.toLowerCase().strip().contains("skills​:"))
+				System.out.println(s);
+				if(s.toLowerCase().strip().contains("skills​:") ||
+						s.toUpperCase().contains("TECHNICAL SKILLS") ||
+						s.toLowerCase().contains("languages"))
 				{
+					s = technicalSkillsRegex(s);
+					//System.out.println(s);
 					stripSkills(s,skillType,skillList);
 				}
 			}
@@ -38,45 +44,104 @@ public class SkillBuilder
 			for(String s : paragraphs)
 			{
 				//System.out.println(s + " ==== ");
-				if(s.toLowerCase().strip().contains("Skills:".toLowerCase()))
+				if(s.toLowerCase().strip().contains("Skills:".toLowerCase()) ||
+						s.toUpperCase().contains("TECHNICAL SKILLS"))
 				{
+					s = technicalSkillsRegex(s);
 					stripSkills(s,skillType,skillList);
 				}
 			}
 		}
 		return skillList;
 	}
+
+	private static String technicalSkillsRegex(String s)
+	{
+		if(s.toUpperCase().contains("TECHNICAL SKILLS"))
+		{
+			s = s.substring(s.toUpperCase().indexOf("TECHNICAL SKILLS"),s.length());
+			Pattern pattern = Pattern.compile(".+[A-Z]{4}+");
+		    Matcher matcher = pattern.matcher(s);
+		    
+		    int startPoint = 0;
+		    while (matcher.find()) {
+//					        System.out.print("Start index: " + matcher.start());
+//					        System.out.print(" End index: " + matcher.end());
+		    	if(matcher.group().equalsIgnoreCase("technical skills"))
+		    	{
+		    		startPoint = matcher.end();
+		    	}
+		    	else if(!matcher.group().toUpperCase().equals(matcher.group()))
+		    	{
+		    		continue;
+		    	}
+		    	else
+		    	{				    		
+		    		s = s.substring(startPoint,matcher.start());
+		    		break;
+		    	}
+		    }
+		}
+		return s;
+	}
 	
 	private static void stripSkills(String s, String skillType, Set<Skill> skillList)
 	{
 		List<SkillResource> resourceList = new ArrayList<>();
 		s = s.substring(s.indexOf(":")+1,s.length());
-		for(String skillLine : s.strip().split("\n"))
+		s = s.replaceAll("and", ",");
+		
+		String[] skillLines = s.strip().split("\n");
+		for(String skillLine : skillLines)
 		{
+			if(skillLine.contains("(") && skillLine.contains(")"))
+			{
+				skillLine = skillLine.strip().split("\\(")[0] + skillLine.strip().split("\\)")[1];
+			}
+			if(skillLine.contains("("))
+			{
+				skillLine = skillLine.strip().split("\\(")[0];
+			}
+			if(skillLine.contains(")"))
+			{
+				skillLine = skillLine.strip().split("\\)")[1];
+			}
 			for(String skill : skillLine.strip().split(","))
 			{
+				if(skill.toLowerCase().equals(skill))
+				{
+					System.out.println(skill);
+					continue;
+				}
 				skill = skill.replaceAll("\\s+", "");
 				if(skill.contains(":"))
 				{
 					skillType = skill.substring(skill.indexOf(":")+1, skill.length());
 					skillType = skillType.replaceAll("\\s+", "");
-					parseSkill(skillType, skillList);
+					skillType = parseSkill(skillType, skillList);
 				}
 				else
 				{
+					if(skill.length() >= 15)
+					{
+						System.out.println(skill);
+						continue;
+					}
 					skillType = skill;
-					parseSkill(skillType, skillList);
+					skillType = parseSkill(skillType, skillList);
 				}
-				
-				Skill temp = new Skill(skillType);
-				resourceList = ResourceBuilder.buildSkillResources(temp,temp.getSkillType());
-				skillList.add(temp);
-				temp.setResourceList(resourceList);
+				if(!skillType.isBlank())
+				{
+					Skill temp = new Skill(skillType);
+					resourceList = ResourceBuilder.buildSkillResources(temp);
+					skillList.add(temp);
+					temp.setResourceList(resourceList);
+				}
 			}
 		}
 	}
 
-	private static void parseSkill(String skillType, Set<Skill> skillList) {
+	private static String parseSkill(String skillType, Set<Skill> skillList) {
 		List<SkillResource> resourceList = new ArrayList<>();
 		if(skillType.contains("/"))
 		{
@@ -91,11 +156,12 @@ public class SkillBuilder
 					}
 				}
 				Skill temp = new Skill(newSkill);
-				resourceList = ResourceBuilder.buildSkillResources(temp,temp.getSkillType());
+				resourceList = ResourceBuilder.buildSkillResources(temp);
 				skillList.add(temp);			
 				temp.setResourceList(resourceList);
 			}
 			skillType = skillType.split("/")[0];
 		}
+		return skillType;
 	}
 }

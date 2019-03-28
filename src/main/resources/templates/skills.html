@@ -1,18 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+<meta name="viewport" http-equiv="content-type" content="text/plain, width=device-width, initial-scale=1.0, minimum-scale=1.0" />
 <title>ResumeQuest: Resume Interview Builder</title>
 <link rel="stylesheet" href="/css/main.css" />
 </head>
 <body>
 	<div class="upload-container">
-		<div class="upload-header">
-			<h2 th:text="${title}"></h2>
-        </div>
-        <div th:each="resource :*{resources}">
-			<p th:text="${entry.question}"></p>
+		<div id="resumeQuest" class="upload-header">
+                <h2>ResumeQuest: Resume Interview Builder</h2>
+            </div>
+		<div id="skillInfo">
+			<button onclick="getFileInformation()">Back</button>
+			<div id="skillInterview" class="upload-header">
+				<h2 th:ahref="${url}" th:utext="${title}"></h2>
+	        </div>
+	        <div th:each="resource :*{resources}">
+				<p th:if="${#strings.isEmpty(resource.url)}" th:utext="${resource.question}"></p>
+				<p th:unless="${#strings.isEmpty(resource.url)}" ><a th:href="${resource.url}" th:utext="${resource.question}" target="_blank"></a></p>
+			</div>
 		</div>
+		<div id="uploadForm" class="upload-content">
+            <div class="single-upload">
+                <h3 id="uploadHeader" name="uploadHeader">Upload PDF/DocX File</h3>
+                <form id="singleUploadForm" name="singleUploadForm">
+                    <input id="singleFileUploadInput" type="file" name="file" class="file-input" required />
+                    <button type="submit" class="primary submit-btn">Submit</button>
+                </form>
+                <div class="upload-response">
+                    <div id="singleFileUploadError"></div>
+                    <div id="singleFileUploadSuccess"></div>
+                </div>
+            </div>
+        </div>
 	</div>
+	<script src="/js/main.js" ></script>
 </body>
 </html>

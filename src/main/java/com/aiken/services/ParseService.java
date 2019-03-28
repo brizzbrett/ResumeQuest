@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -39,6 +40,7 @@ public class ParseService
     private static String filename;
     private static String fileDownloadUri;
     private static String contentType;
+    private static FileInformation fi;
     
     @Autowired
     private SkillRepository skillRepo;
@@ -58,7 +60,7 @@ public class ParseService
         }
     }
 	
-	public Set<SkillResource> getSkillResources(String s)
+	public List<SkillResource> getSkillResources(String s)
 	{
 		Set<Skill> skillList = new HashSet<Skill>(skillRepo.findAll());
 		if(skillList != null)
@@ -73,6 +75,7 @@ public class ParseService
 		}
 		return null;
 	}
+	
     public FileInformation saveSkills(MultipartFile file) 
     {  	
     	filename = StringUtils.cleanPath(file.getOriginalFilename());
@@ -121,7 +124,7 @@ public class ParseService
 		
 		fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/")
 				.path("resumequest_" + filename).toUriString();
-		FileInformation fi = new FileInformation(filename, fileDownloadUri, contentType, new TreeSet<Skill>(skillRepo.findAll()));
+		fi = new FileInformation(filename, fileDownloadUri, contentType, new TreeSet<Skill>(skillRepo.findAll()));
 	    return fi;		
     }
 
@@ -154,5 +157,10 @@ public class ParseService
 	{
 		skillRepo.deleteAll();
 		resourceRepo.deleteAll();
+	}
+
+	public FileInformation getPersistedFile()
+	{
+		return fi;
 	}
 }
