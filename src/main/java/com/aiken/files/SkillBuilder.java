@@ -26,13 +26,11 @@ public class SkillBuilder
 			
 			for(String s : paragraphs)
 			{
-				System.out.println(s);
 				if(s.toLowerCase().strip().contains("skills​:") ||
 						s.toUpperCase().contains("TECHNICAL SKILLS") ||
 						s.toLowerCase().contains("languages"))
 				{
 					s = technicalSkillsRegex(s);
-					//System.out.println(s);
 					stripSkills(s,skillType,skillList);
 				}
 			}
@@ -43,7 +41,6 @@ public class SkillBuilder
 			
 			for(String s : paragraphs)
 			{
-				//System.out.println(s + " ==== ");
 				if(s.toLowerCase().strip().contains("Skills:".toLowerCase()) ||
 						s.toUpperCase().contains("TECHNICAL SKILLS"))
 				{
@@ -64,9 +61,8 @@ public class SkillBuilder
 		    Matcher matcher = pattern.matcher(s);
 		    
 		    int startPoint = 0;
-		    while (matcher.find()) {
-//					        System.out.print("Start index: " + matcher.start());
-//					        System.out.print(" End index: " + matcher.end());
+		    while (matcher.find()) 
+		    {
 		    	if(matcher.group().equalsIgnoreCase("technical skills"))
 		    	{
 		    		startPoint = matcher.end();
@@ -96,7 +92,8 @@ public class SkillBuilder
 		{
 			if(skillLine.contains("(") && skillLine.contains(")"))
 			{
-				skillLine = skillLine.strip().split("\\(")[0] + skillLine.strip().split("\\)")[1];
+				if(skillLine.strip().split("\\)").length > 1 && skillLine.strip().split("\\(").length > 1)
+					skillLine = skillLine.strip().split("\\(")[0] + skillLine.strip().split("\\)")[1];
 			}
 			if(skillLine.contains("("))
 			{
@@ -110,7 +107,6 @@ public class SkillBuilder
 			{
 				if(skill.toLowerCase().equals(skill))
 				{
-					System.out.println(skill);
 					continue;
 				}
 				skill = skill.replaceAll("\\s+", "");
@@ -124,7 +120,6 @@ public class SkillBuilder
 				{
 					if(skill.length() >= 15)
 					{
-						System.out.println(skill);
 						continue;
 					}
 					skillType = skill;

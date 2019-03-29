@@ -59,6 +59,79 @@ public class ResourceBuilder
 			case "CSS":
 				docs.add(Jsoup.connect("https://career.guru99.com/top-50-csscascading-style-sheet-interview-questions/").get());
 				selector = "strong";
+				break;
+			case "ADOBEPHOTOSHOP":
+				docs.add(Jsoup.connect("https://career.guru99.com/top-25-adobe-photoshop-interview-questions/").get());
+				selector = "strong";
+				break;
+			case "ECLIPSE":
+				docs.add(Jsoup.connect("https://www.softwaretestinghelp.com/eclipse-interview-questions/").get());
+				docs.add(Jsoup.connect("https://career.guru99.com/top-16-eclipse-interview-questions/").get());			
+				selector = "strong";
+				break;
+			case "SPRINGBOOT":
+				docs.add(Jsoup.connect("https://www.javatpoint.com/spring-boot-interview-questions").get());
+				selector = "h3";
+			case "SPRING":
+				docs.add(Jsoup.connect("https://www.baeldung.com/spring-boot-interview-questions").get());
+				selector += ", span";
+				break;
+			case "MYSQL":
+				docs.add(Jsoup.connect("https://career.guru99.com/top-50-mysql-interview-questions-answers/").get());
+				selector = "strong";
+				break;
+			case "GITHUB":
+			case "GIT":
+				docs.add(Jsoup.connect("https://career.guru99.com/top-40-interview-questions-on-git/").get());
+				selector = "b";
+				break;
+			case "JSON":
+				docs.add(Jsoup.connect("https://www.onlineinterviewquestions.com/json-interview-questions/").get());
+				selector = "span";
+				break;
+			case "UNITY":
+				docs.add(Jsoup.connect("https://www.wisdomjobs.com/e-university/unity-3d-interview-questions.html").get());
+				selector = "strong";
+				break;
+			case "PHP":
+				docs.add(Jsoup.connect("https://www.guru99.com/php-interview-questions-answers.html").get());
+				selector = "strong";
+				break;
+			case "BASH":
+			case "SHELL":
+				docs.add(Jsoup.connect("https://www.guru99.com/shell-scripting-interview-questions.html").get());
+				selector = "strong";
+				break;
+			case "APACHETOMCAT":
+			case "TOMCAT":
+				docs.add(Jsoup.connect("https://www.softwaretestinghelp.com/apache-tomcat-interview-questions/").get());
+				selector = "strong";
+				break;
+			case "APACHE2":
+				docs.add(Jsoup.connect("https://www.tecmint.com/apache-interview-questions/").get());
+				selector = "h6";
+				break;
+			case "JPA":
+				docs.add(Jsoup.connect("https://codingcompiler.com/jpa-interview-questions-answers/").get());
+				selector = "span";
+				break;
+			case "ANGULARJS":
+				docs.add(Jsoup.connect("https://www.edureka.co/blog/interview-questions/top-angularjs-interview-questions-2016/").get());
+				selector = "strong";
+				break;
+			case "BOOTSTRAP":
+				docs.add(Jsoup.connect("https://www.tutorialspoint.com/bootstrap/bootstrap_interview_questions.htm").get());
+				selector = "label";
+				break;
+			case "RABBITMQ":
+				docs.add(Jsoup.connect("https://aircto.com/interview-questions/rabbitmq/").get());
+				selector = "p";
+				break;
+			case "SQL":
+				docs.add(Jsoup.connect("https://www.guru99.com/sql-interview-questions-answers.html").get());
+				selector = "strong";
+				break;
+			
 			default:
 			}
 			
@@ -67,7 +140,6 @@ public class ResourceBuilder
 			
 			if(!docs.isEmpty())
 			{
-				System.out.println("HERE!");
 				List<Elements> questionsList = new ArrayList<>();
 				for(Document doc : docs)
 				{
@@ -98,6 +170,7 @@ public class ResourceBuilder
 								question.html().contains("Where") ||
 								question.html().contains("Why") ||
 								question.html().contains("Difference") ||
+								question.html().contains("Explain") ||
 								question.html().contains("Is") ||
 								question.html().contains("How"))
 						{
@@ -108,7 +181,7 @@ public class ResourceBuilder
 							else
 							{
 								String url = "https://www.google.com/search?q=";
-								for(String q : question.html().replaceFirst("Q.?:[0-9]+", "").split(" "))
+								for(String q : question.html().replaceFirst("Q?:[0-9]+", "").split(" "))
 								{
 									url += q + "+";
 								}
