@@ -23,13 +23,14 @@ public class SkillBuilder
 		if(contentType.equals("pdf"))
 		{
 			paragraphs = skills.trim().split("\n ");
-			
+			System.out.println(paragraphs.length);
 			for(String s : paragraphs)
 			{
 				if(s.toLowerCase().strip().contains("skills​:") ||
 						s.toUpperCase().contains("TECHNICAL SKILLS") ||
 						s.toLowerCase().contains("languages"))
 				{
+					System.out.println(s);
 					s = technicalSkillsRegex(s);
 					stripSkills(s,skillType,skillList);
 				}
@@ -41,9 +42,11 @@ public class SkillBuilder
 			
 			for(String s : paragraphs)
 			{
-				if(s.toLowerCase().strip().contains("Skills:".toLowerCase()) ||
-						s.toUpperCase().contains("TECHNICAL SKILLS"))
+				if(s.toLowerCase().strip().strip().split("\n")[0].contains("Skills:".toLowerCase()) ||
+						s.toUpperCase().strip().split("\n")[0].contains("TECHNICAL SKILLS") ||
+						s.toLowerCase().strip().split("\n")[0].contains("languages"))
 				{
+					System.out.println(s + "\n");
 					s = technicalSkillsRegex(s);
 					stripSkills(s,skillType,skillList);
 				}
@@ -90,6 +93,7 @@ public class SkillBuilder
 		String[] skillLines = s.strip().split("\n");
 		for(String skillLine : skillLines)
 		{
+			skillLine = skillLine.replaceAll("-", "");
 			if(skillLine.contains("(") && skillLine.contains(")"))
 			{
 				if(skillLine.strip().split("\\)").length > 1 && skillLine.strip().split("\\(").length > 1)
@@ -128,9 +132,9 @@ public class SkillBuilder
 				if(!skillType.isBlank())
 				{
 					Skill temp = new Skill(skillType);
-					resourceList = ResourceBuilder.buildSkillResources(temp);
+					//resourceList = ResourceBuilder.buildSkillResources(temp);
 					skillList.add(temp);
-					temp.setResourceList(resourceList);
+					//temp.setResourceList(resourceList);
 				}
 			}
 		}
@@ -151,9 +155,7 @@ public class SkillBuilder
 					}
 				}
 				Skill temp = new Skill(newSkill);
-				resourceList = ResourceBuilder.buildSkillResources(temp);
 				skillList.add(temp);			
-				temp.setResourceList(resourceList);
 			}
 			skillType = skillType.split("/")[0];
 		}

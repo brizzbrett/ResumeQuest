@@ -17,7 +17,7 @@
 	        </div>
 	        <div th:each="resource :*{resources}">
 				<p th:if="${#strings.isEmpty(resource.url)}" th:utext="${resource.question}"></p>
-				<p th:unless="${#strings.isEmpty(resource.url)}" ><a th:href="${resource.url}" th:utext="${resource.question}" target="_blank"></a></p>
+				<p th:unless="${#strings.isEmpty(resource.url)}" ><a th:id=skill th:href="${resource.url}" th:utext="${resource.question}" target="_blank"></a></p>
 			</div>
 		</div>
 		<div id="uploadForm" class="upload-content">
@@ -32,6 +32,10 @@
                     <div id="singleFileUploadSuccess"></div>
                 </div>
             </div>
+        </div>
+        <div id="footer">
+	        <a href="localhost:8080/swagger-ui.html" target="_blank">Rest API</a>
+	        Copyright Brett Aiken &copy; 2019
         </div>
 	</div>
 	<script src="/js/main.js" ></script>

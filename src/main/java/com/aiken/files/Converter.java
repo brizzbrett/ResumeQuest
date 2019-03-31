@@ -9,6 +9,8 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.aiken.exceptions.WrongFileTypeException;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
 public class Converter 
 {
@@ -48,12 +50,10 @@ public class Converter
 		
 		try
 		{			
-			PDDocument pdf = PDDocument.load(file.getInputStream());
-			PDFTextStripper pdfStripper = new PDFTextStripper();
-
-			String stripper = pdfStripper.getText(pdf);
+			PdfReader pdf = new PdfReader(file.getInputStream());
+			String extractor = PdfTextExtractor.getTextFromPage(pdf, 1);
 			
-			return stripper;
+			return extractor;
 		} 
 		catch (IOException e) 
 		{

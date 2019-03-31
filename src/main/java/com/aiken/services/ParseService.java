@@ -27,6 +27,7 @@ import com.aiken.exceptions.DLFileNotFoundException;
 import com.aiken.exceptions.FileStorageException;
 import com.aiken.exceptions.WrongFileTypeException;
 import com.aiken.files.Converter;
+import com.aiken.files.ResourceBuilder;
 import com.aiken.files.SkillBuilder;
 import com.aiken.repos.ResourceRepository;
 import com.aiken.repos.SkillRepository;
@@ -69,7 +70,15 @@ public class ParseService
 			{
 				if(skill.getSkillType().equalsIgnoreCase(s))
 				{
-					return resourceRepo.findBySkill(skill);
+					if(resourceRepo.findBySkill(skill).isEmpty())
+					{
+						skill.setResourceList(ResourceBuilder.buildSkillResources(skill));
+						return skill.getResourceList();
+					}
+					else
+					{
+						return resourceRepo.findBySkill(skill);
+					}
 				}
 			}
 		}

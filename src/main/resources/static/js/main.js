@@ -36,7 +36,7 @@ function getFileInformation()
 	        for (i in response.skills) 
 	        {
 	        	//singleFileUploadSuccess.innerHTML += "<br><b><a href=" + response.skills[i].resourcelist[0].url + " target=_blank>" + response.skills[i].resourcelist[0].question + "</a>";
-	        	document.querySelector('#singleFileUploadSuccess').innerHTML += "<br><b><a href=javascript:getSkillURL(\"" + response.skills[i].skilltype + "\"); target=_blank>" + response.skills[i].skilltype + " resources" + "</a>";
+	        	document.querySelector('#singleFileUploadSuccess').innerHTML += "<br><b><a id=skill href=javascript:getSkillURL(\"" + response.skills[i].skilltype + "\"); target=_blank>" + response.skills[i].skilltype + " resources" + "</a>";
 	        }
 	        document.querySelector('#singleFileUploadSuccess').innerHTML += "</p>";
 	        
@@ -81,7 +81,7 @@ function uploadSingleFile(file) {
 	        for (i in response.skills) 
 	        {
 	        	//singleFileUploadSuccess.innerHTML += "<br><b><a href=" + response.skills[i].resourcelist[0].url + " target=_blank>" + response.skills[i].resourcelist[0].question + "</a>";
-	        	singleFileUploadSuccess.innerHTML += "<br><b><a href=javascript:getSkillURL(\"" + response.skills[i].skilltype + "\"); target=_blank>" + response.skills[i].skilltype + " resources" + "</a>";
+	        	singleFileUploadSuccess.innerHTML += "<br><b><a id=skill href=javascript:getSkillURL(\"" + response.skills[i].skilltype + "\"); target=_blank>" + response.skills[i].skilltype + " resources" + "</a>";
 	        }
 	        singleFileUploadSuccess.innerHTML += "</p>";
 	        

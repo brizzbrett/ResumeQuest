@@ -35,6 +35,7 @@ public class ResourceBuilder
 			case "JAVA":			
 				docs.add(Jsoup.connect("https://www.geeksforgeeks.org/commonly-asked-java-programming-interview-questions-set-1/").get());
 				docs.add(Jsoup.connect("https://www.geeksforgeeks.org/commonly-asked-java-programming-interview-questions-set-2/").get());
+				docs.add(Jsoup.connect("https://tekslate.com/advanced-java-interview-questions").get());
 				selector = "strong";
 				break;
 			case "C":			
@@ -50,6 +51,10 @@ public class ResourceBuilder
 				break;
 			case "JAVASCRIPT":
 				docs.add(Jsoup.connect("https://www.geeksforgeeks.org/commonly-asked-javascript-interview-questions-set-1/").get());
+				selector = "strong";
+				break;
+			case "PYTHON":
+				docs.add(Jsoup.connect("https://www.guru99.com/python-interview-questions-answers.html").get());
 				selector = "strong";
 				break;
 			case "AWS":
@@ -70,11 +75,9 @@ public class ResourceBuilder
 				selector = "strong";
 				break;
 			case "SPRINGBOOT":
+			case "SPRING":
 				docs.add(Jsoup.connect("https://www.javatpoint.com/spring-boot-interview-questions").get());
 				selector = "h3";
-			case "SPRING":
-				docs.add(Jsoup.connect("https://www.baeldung.com/spring-boot-interview-questions").get());
-				selector += ", span";
 				break;
 			case "MYSQL":
 				docs.add(Jsoup.connect("https://career.guru99.com/top-50-mysql-interview-questions-answers/").get());
@@ -131,7 +134,7 @@ public class ResourceBuilder
 				docs.add(Jsoup.connect("https://www.guru99.com/sql-interview-questions-answers.html").get());
 				selector = "strong";
 				break;
-			
+				
 			default:
 			}
 			
