@@ -90,51 +90,55 @@ public class ParseService
     	filename = StringUtils.cleanPath(file.getOriginalFilename());
     	contentType = file.getContentType();
 		
-		if(filename.contains(".."))
-		{
-			throw new FileStorageException("Sorry! Filename contains invalid path sequence - " + filename);
-		}
-		
-		Path targetLocation = fileStorageLocation.resolve("resumequest_" + filename);
 		try
 		{
+			if(filename.contains(".."))
+			{
+				throw new FileStorageException("Sorry! Filename contains invalid path sequence - " + filename);
+			}
+			
+			Path targetLocation = fileStorageLocation.resolve(filename);
 			Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e)
+
+			if(file.getContentType().equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
+	    			file.getContentType().equals("application/octet-stream"))
+	    	{
+		    	String docxExtract = Converter.docXConverter(file, filename);
+		    	
+		    	for(Skill skill : SkillBuilder.buildSkills(docxExtract, "docx"))
+		    	{
+		    		skillRepo.save(skill);
+		    	}
+
+				fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/")
+						.path(filename).toUriString();
+				fi = new FileInformation(filename, fileDownloadUri, contentType, new TreeSet<Skill>(skillRepo.findAll()));
+			    return fi;	
+		    	
+	    	}
+	    	else if(file.getContentType().equals("application/pdf"))
+	    	{
+	    		String pdfExtract = Converter.pdfConverter(file, filename);
+		    	for(Skill skill : SkillBuilder.buildSkills(pdfExtract, "pdf"))
+		    	{
+		    		skillRepo.save(skill);
+		    	}
+
+				fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/")
+						.path(filename).toUriString();
+				fi = new FileInformation(filename, fileDownloadUri, contentType, new TreeSet<Skill>(skillRepo.findAll()));
+			    return fi;	
+	    	}
+	    	else
+	    	{
+	    		throw new WrongFileTypeException("File must be of type docx or pdf - " + file.getOriginalFilename() + " - " + file.getContentType());
+	    	}			
+		} 
+		catch (Exception e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FileStorageException("Could not store file " + file.getOriginalFilename() + ". Please try again!", e);
 		}
 		
-		if(file.getContentType().equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
-    			file.getContentType().equals("application/octet-stream"))
-    	{
-	    	String docxExtract = Converter.docXConverter(file, filename);
-	    	
-	    	for(Skill skill : SkillBuilder.buildSkills(docxExtract, "docx"))
-	    	{
-//	    		skill.setResourceList(ResourceBuilder.buildSkillResources(skill, skill.getSkillType()));
-	    		skillRepo.save(skill);
-	    	}
-	    	
-    	}
-    	else if(file.getContentType().equals("application/pdf"))
-    	{
-    		String pdfExtract = Converter.pdfConverter(file, filename);
-	    	for(Skill skill : SkillBuilder.buildSkills(pdfExtract, "pdf"))
-	    	{
-//	    		ResourceBuilder.buildSkillResources(skill, skill.getSkillType());
-	    		skillRepo.save(skill);
-	    	}
-    	}
-    	else
-    	{
-    		throw new WrongFileTypeException("File must be of type docx or pdf - " + file.getOriginalFilename() + " - " + file.getContentType());
-    	}
-		
-		fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/")
-				.path("resumequest_" + filename).toUriString();
-		fi = new FileInformation(filename, fileDownloadUri, contentType, new TreeSet<Skill>(skillRepo.findAll()));
-	    return fi;		
     }
 
     public Resource loadFileAsResource(String filename) 

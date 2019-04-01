@@ -19,7 +19,7 @@ public class SkillBuilder
 		Set<Skill> skillList = new TreeSet<>();
 		String[] paragraphs = null;
 		String skillType = "";	
-		
+		System.out.println(skills);
 		if(contentType.equals("pdf"))
 		{
 			paragraphs = skills.trim().split("\n ");

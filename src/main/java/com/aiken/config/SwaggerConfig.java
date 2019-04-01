@@ -22,6 +22,7 @@ public class SwaggerConfig
 	public Docket fileApi()
 	{
 		Docket docket = new Docket(DocumentationType.SWAGGER_2)
+				.useDefaultResponseMessages(false)
 				.select().apis(RequestHandlerSelectors.basePackage("com.aiken"))
 				.build();
 		Collection<VendorExtension> extensions = new ArrayList<>();

@@ -30,13 +30,14 @@ public class ParseController {
 	@Autowired
 	private ParseService helper;
 
-	@GetMapping(path="/get")
+	@GetMapping(path="/getFileInfo")
 	public ResponseEntity<FileInformation> getPersistedFile()
 	{
 		FileInformation fi = helper.getPersistedFile();
 		return ResponseEntity.ok(fi);	
 	}
-	@DeleteMapping(path="/delete")
+	
+	@DeleteMapping(path="/deleteFileInfo")
 	public ResponseEntity<?> deletePersistedFile()
 	{
 		helper.deletePersistedFile();
@@ -59,13 +60,18 @@ public class ParseController {
 		return "redirect:/";
 	}
 
-	@PostMapping(path="/upload",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE}, 
+	@PostMapping(path="/uploadFile",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE}, 
 			consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<FileInformation> uploadFile(@RequestParam("file") MultipartFile file) 
 	{
+		
 		FileInformation fileInfo = helper.saveSkills(file);
-
-		return ResponseEntity.ok(fileInfo);
+		if(fileInfo != null)
+		{
+			return ResponseEntity.ok(fileInfo);
+		}
+		
+		return ResponseEntity.badRequest().body(fileInfo);
 	}
 
 	@GetMapping(path="/download/{fileName:.+}", produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})

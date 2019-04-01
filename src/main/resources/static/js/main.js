@@ -11,7 +11,7 @@ function deleteFile()
 {
 	console.log("DELETE FILES")
 	var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/delete");  
+    xhr.open("DELETE", "/deleteFileInfo");  
     xhr.send(null);
     location.reload();
 }
@@ -20,7 +20,7 @@ function getFileInformation()
 {
 	console.log("GET FILES")
 	var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/get"); 
+    xhr.open("GET", "/getFileInfo"); 
     xhr.onload = function() {
     	if(xhr.status == 200) {
     		console.log("GET UPLOAD")
@@ -67,7 +67,7 @@ function uploadSingleFile(file) {
     formData.append("file", file);
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/upload");
+    xhr.open("POST", "/uploadFile");
 
     xhr.onload = function() {
     	if(xhr.status == 200) {
@@ -88,7 +88,7 @@ function uploadSingleFile(file) {
 	        singleFileUploadSuccess.style.display = "block";
 	    } else {
 	        singleFileUploadSuccess.style.display = "none";
-	        singleFileUploadError.innerHTML = (response && response.message) || "Some Error Occurred";
+	        singleFileUploadError.innerHTML = response.message || "Some Error Occurred";
 	    }
     };
 
